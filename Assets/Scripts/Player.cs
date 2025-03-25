@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
          transform.Translate(_speed * Time.deltaTime * VerticalInput * Vector3.up);
          
         PlayerMovement();
-        Fire();   
+        //Fire();   
     }
 
     private void PlayerMovement()

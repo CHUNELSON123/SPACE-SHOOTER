@@ -15,7 +15,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Sprite[] _liveSprite;
     [SerializeField]
-    private GameObject _restartVisualizer;
+    private GameObject _restartVisualizer, _exitVisualizer;
+    public GameObject _controlInstruct, _shootInstruct;
     [SerializeField]
     private GameManager _gameManager;
     [SerializeField]
@@ -26,7 +27,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        
+        _player = GameObject.Find("Player").GetComponent<Player>();
         _levelAnim = GameObject.Find("Level_panel").GetComponent<Animator>();
         _scoreText.text = "Score: " + 0;
         bestScore = PlayerPrefs.GetInt("BestScore", 0);
@@ -37,6 +38,10 @@ public class UIManager : MonoBehaviour
         } 
     }
 
+    private void Update()
+    {
+        StartCoroutine(InstructionCountDown());
+    }
     public void UpdateScore()
     {
         playerScore += 1;
@@ -51,6 +56,7 @@ public class UIManager : MonoBehaviour
         if(currentLive == 0)
         {
             _restartVisualizer.SetActive(true);
+            _exitVisualizer.SetActive(true);
             _gameManager.GameOver();
         }
     }
@@ -63,5 +69,19 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("BestScore", bestScore);
             _bestScoreText.text = "Best: " + bestScore;
         }
+    }
+
+     IEnumerator InstructionCountDown()
+    {
+        yield return new WaitForSeconds(10f);
+        _controlInstruct.SetActive(false);
+        _shootInstruct.SetActive(false);
+        _player.Fire();
+    }
+
+    public void DisableInstructions()
+    {
+        _controlInstruct.SetActive(false);
+        _shootInstruct.SetActive(false);
     }
 }

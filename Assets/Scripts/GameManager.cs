@@ -12,8 +12,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _pauseVisualizer;
     public bool isPaused = false;
-    
-   
+    [SerializeField]
+    private UIManager _uiManager;
+    [SerializeField]
+    private Player _player;
+
+    private void Start()
+    {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -27,11 +35,6 @@ public class GameManager : MonoBehaviour
             {
                 PauseGame();
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
         }
     }
 
@@ -58,5 +61,13 @@ public class GameManager : MonoBehaviour
     public void Replay()
     {
         SceneManager.LoadScene(1);
+        Time.timeScale = 1;
+        _player.Fire();
+        _uiManager.DisableInstructions();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
